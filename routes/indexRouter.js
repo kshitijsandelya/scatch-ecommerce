@@ -13,11 +13,28 @@ router.get("/", function (req, res) {
     res.render("index", { message, error, loggedin: false });
 });
 
-router.get('/shop', isloggedin, async function (req, res) {
-    let products = await productModel.find();
-    let message = req.flash("success");
-    res.render('shop', { products, message });
-})
+router.get("/shop", isloggedin, async (req, res) => {
+    try {
+        let sortby = req.query.sortby || "newest";
+        let sortCriteria = {};
+
+        if (sortby === "price_low") {
+            sortCriteria = { price: 1 }; // 1 means Ascending (Lowest first)
+        } else if (sortby === "price_high") {
+            sortCriteria = { price: -1 }; // -1 means Descending (Highest first)
+        } else if (sortby === "newest") {
+            sortCriteria = { _id: -1 }; // Newest items have the highest/latest _id
+        }
+
+        let products = await productModel.find().sort(sortCriteria);
+
+        let message = req.flash("success");
+
+        res.render("shop", { products, message, sortby });
+    } catch (err) {
+        res.send(err.message);
+    }
+});
 
 router.get('/cart', isloggedin, async function (req, res) {
     let user = await userModel.findOne({ email: req.user.email }).populate("cart");

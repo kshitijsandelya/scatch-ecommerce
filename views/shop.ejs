@@ -12,14 +12,16 @@
             <div class="w-full h-screen flex items-start px-20 py-20">
                 <div class="w-[25%] flex h-screen flex-col items-start">
                     <div class="flex items-center gap-2">
-                        <h3>sort by</h3>
-                        <form action="/shop">
-                            <select class="border-[1px] px-2 py-1" name="sortby" id="">
-                                <option value="newest">Newest</option>
-                                <option value="price-low-to-high">Price: Low to High</option>
-                                <option value="price-high-to-low">Price: High to Low</option>
-                            </select>
-                        </form>
+                        <span class="text-sm">sort by</span>
+                        <select name="sortby" id="sortby" class="border border-zinc-200 px-2 py-1 rounded-md"
+                            onchange="window.location.href='/shop?sortby=' + this.value">
+                            <option value="newest" <%=typeof sortby !=='undefined' && sortby==='newest' ? 'selected'
+                                : '' %>>Newest Collection</option>
+                            <option value="price_low" <%=typeof sortby !=='undefined' && sortby==='price_low'
+                                ? 'selected' : '' %>>Price: Low to High</option>
+                            <option value="price_high" <%=typeof sortby !=='undefined' && sortby==='price_high'
+                                ? 'selected' : '' %>>Price: High to Low</option>
+                        </select>
                     </div>
                     <div class="flex flex-col mt-20 hidden">
                         <a class="block w-fit mb-2" href="">New Collection</a>
